@@ -13,7 +13,7 @@ namespace FreshMvvm
 
         protected void RegisterNavigation ()
         {
-            FreshIOC.Container.Register<IFreshNavigationService> (this);
+            FreshIOC.Register<IFreshNavigationService> (this);
         }
 
         protected virtual Page CreateContainerPage (Page page)

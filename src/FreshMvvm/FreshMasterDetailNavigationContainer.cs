@@ -27,7 +27,7 @@ namespace FreshMvvm
 
         protected virtual void RegisterNavigation ()
         {
-            FreshIOC.Container.Register<IFreshNavigationService> (this);
+            FreshIOC.Register<IFreshNavigationService> (this);
         }
 
         public virtual void AddPage<T> (string title, object data = null) where T : FreshBasePageModel

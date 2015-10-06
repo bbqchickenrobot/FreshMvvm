@@ -12,7 +12,7 @@ namespace FreshMvvm
 
         public static Page ResolvePageModel<T> (object initData) where T : FreshBasePageModel
         {
-            var pageModel = FreshIOC.Container.Resolve<T> ();
+            var pageModel = FreshIOC.Resolve<T> ();
 
             return ResolvePageModel<T> (initData, pageModel);
         }
@@ -25,7 +25,7 @@ namespace FreshMvvm
             if (pageType == null)
                 throw new Exception (name + " not found");
 
-            var page = (Page)FreshIOC.Container.Resolve (pageType);
+            var page = (Page)FreshIOC.Resolve (pageType);
 
             page.BindingContext = pageModel;
             pageModel.WireEvents (page);

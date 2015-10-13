@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace Xamarui.Forms.Mvvm
 {
-    public class FreshMasterDetailNavigationContainer : Xamarin.Forms.MasterDetailPage, IFreshNavigationService
+    public class SimpleMasterDetailNavigation : Xamarin.Forms.MasterDetailPage, ISimpleNavigationService
     {
         Dictionary<string, Page> _pages = new Dictionary<string, Page> ();
         ContentPage _menuPage;
@@ -23,13 +23,13 @@ namespace Xamarui.Forms.Mvvm
 
         protected virtual void RegisterNavigation ()
         {
-            //FreshIoC.Register<IFreshNavigationService> (this);
+            //IoCWrapper.Register<ISimpleNavigationService> (this);
         }
 
-        public virtual void AddPage<T> (string title, object data = null) where T : IFreshBasePageModel
+        public virtual void AddPage<T> (string title, object data = null) where T : ISimpleBasePageModel
         {
             //var page = FreshPageModelResolver.ResolvePageModel<T> (data);
-            var page = FreshIoC.Resolve<IBaseContentPage<T>>() as Page;
+            var page = IoCWrapper.Resolve<IBaseContentPage<T>>() as Page;
             ((IBaseContentPage) page).NavigationService = this;
             var navigationContainer = CreateContainerPage (page);
             _pages.Add (title, navigationContainer);
@@ -74,9 +74,9 @@ namespace Xamarui.Forms.Mvvm
             Master = navPage;
         }
 
-        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : FreshBasePageModel, new()
+        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : SimpleBasePageModel, new()
         {
-            await PushPage(page.ToPage());
+            await PushPage(page.ToPage(), modal, animate);
         }
 
         public async Task PushPage (Page page, bool modal = false, bool animate = true)

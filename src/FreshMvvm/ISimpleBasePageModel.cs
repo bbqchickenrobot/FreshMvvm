@@ -3,12 +3,12 @@ using Xamarin.Forms;
 
 namespace Xamarui.Forms.Mvvm
 {
-    public interface IFreshBasePageModel //: INotifyPropertyChanged
+    public interface ISimpleBasePageModel //: INotifyPropertyChanged
     {
         ///// <summary>
         ///// The previous page model, that's automatically filled, on push
         ///// </summary>
-        //IFreshBasePageModel PreviousPageModel { get; set; }
+        //ISimpleBasePageModel PreviousPageModel { get; set; }
 
         /// <summary>
         /// A reference to the current page, that's automatically filled, on push

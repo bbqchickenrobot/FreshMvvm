@@ -11,13 +11,13 @@ namespace Xamarui.Forms.Mvvm
 
         Task<bool> DisplayAlert (string title, string message, string accept, string cancel);
 
-        Task PushPageModel<T> (object data, bool modal = false) where T : FreshBasePageModel;
+        Task PushPageModel<T> (object data, bool modal = false) where T : SimpleBasePageModel;
 
         Task PopPageModel (bool modal = false);
 
         Task PopPageModel (object data, bool modal = false);
 
-        Task PushPageModel<T> () where T : FreshBasePageModel;
+        Task PushPageModel<T> () where T : SimpleBasePageModel;
 
         Task PushPageModel (Type pageModelType);
 

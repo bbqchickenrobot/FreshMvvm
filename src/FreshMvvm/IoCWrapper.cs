@@ -6,7 +6,7 @@ using Paxie.Core;
 
 namespace Xamarui.Forms.Mvvm
 {
-    public static class FreshIoC
+    public static class IoCWrapper
     {
         static Container _container;
 
@@ -53,10 +53,6 @@ namespace Xamarui.Forms.Mvvm
             _container = container;
         }
 
-        public static void Test()
-        {
-
-        }
     }
 }
 

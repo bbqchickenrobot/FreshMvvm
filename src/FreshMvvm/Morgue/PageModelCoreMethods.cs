@@ -7,9 +7,9 @@ namespace Xamarui.Forms.Mvvm
     public class PageModelCoreMethods : IPageModelCoreMethods
     {
         Page _currentPage;
-        FreshBasePageModel _pageModel;
+        SimpleBasePageModel _pageModel;
 
-		public PageModelCoreMethods (Page currentPage, FreshBasePageModel pageModel)
+		public PageModelCoreMethods (Page currentPage, SimpleBasePageModel pageModel)
         {
             _currentPage = currentPage;
 			_pageModel = pageModel;
@@ -35,9 +35,9 @@ namespace Xamarui.Forms.Mvvm
             return false;
         }
 
-        public async Task PushPageModel<T> (object data, bool modal = false) where T : FreshBasePageModel
+        public async Task PushPageModel<T> (object data, bool modal = false) where T : SimpleBasePageModel
         {
-            T pageModel = FreshIoC.Resolve<T> ();
+            T pageModel = IoCWrapper.Resolve<T> ();
 
             await PushPageModel(pageModel, data, modal);
         }
@@ -49,31 +49,31 @@ namespace Xamarui.Forms.Mvvm
 
         public Task PushPageModel(Type pageModelType, object data, bool modal = false)
         {
-            var pageModel = FreshIoC.Resolve(pageModelType) as FreshBasePageModel;
+            var pageModel = IoCWrapper.Resolve(pageModelType) as SimpleBasePageModel;
 
             return PushPageModel(pageModel, data, modal);
         }
 
-        async Task PushPageModel(FreshBasePageModel pageModel, object data, bool modal = false)
+        async Task PushPageModel(SimpleBasePageModel pageModel, object data, bool modal = false)
         {
             var page = FreshPageModelResolver.ResolvePageModel(data, pageModel);
 
             pageModel.PreviousPageModel = _pageModel;
 
-            IFreshNavigationService rootNavigation = FreshIoC.Resolve<IFreshNavigationService> ();
+            ISimpleNavigationService rootNavigation = IoCWrapper.Resolve<ISimpleNavigationService> ();
 
             //await rootNavigation.PushPage (page, pageModel, modal);
         }
 
         public async Task PopPageModel (bool modal = false)
         {
-            IFreshNavigationService rootNavigation = FreshIoC.Resolve<IFreshNavigationService> ();
+            ISimpleNavigationService rootNavigation = IoCWrapper.Resolve<ISimpleNavigationService> ();
             await rootNavigation.PopPage (modal);
         }
 
         public async Task PopToRoot(bool animate)
         {
-            IFreshNavigationService rootNavigation = FreshIoC.Resolve<IFreshNavigationService> ();
+            ISimpleNavigationService rootNavigation = IoCWrapper.Resolve<ISimpleNavigationService> ();
             await rootNavigation.PopToRoot (animate);
         }
 
@@ -85,7 +85,7 @@ namespace Xamarui.Forms.Mvvm
             await PopPageModel (modal);
         }
 
-        public Task PushPageModel<T> () where T : FreshBasePageModel
+        public Task PushPageModel<T> () where T : SimpleBasePageModel
         {
             return PushPageModel<T> (null);
         }

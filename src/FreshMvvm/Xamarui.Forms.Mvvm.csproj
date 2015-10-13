@@ -34,17 +34,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BaseContentPage.cs" />
-    <Compile Include="FreshIoC.cs" />
-    <Compile Include="IFreshBasePageModel.cs" />
+    <Compile Include="IoCWrapper.cs" />
+    <Compile Include="ISimpleBasePageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FreshBasePageModel.cs" />
-    <Compile Include="FreshMasterDetailNavigationContainer.cs" />
-    <Compile Include="FreshNavigationContainer.cs" />
-    <Compile Include="FreshTabbedNavigationContainer.cs" />
-    <Compile Include="IFreshNavigationService.cs" />
+    <Compile Include="SimpleBasePageModel.cs" />
+    <Compile Include="SimpleMasterDetailNavigation.cs" />
+    <Compile Include="SimpleNavigation.cs" />
+    <Compile Include="SimpleTabbedNavigation.cs" />
+    <Compile Include="ISimpleNavigationService.cs" />
     <Compile Include="IPageModelCoreMethods.cs" />
-    <None Include="PageModelCoreMethods.cs" />
-    <Compile Include="FreshPageModelResolver.cs" />
+    <None Include="Morgue\PageModelCoreMethods.cs" />
+    <None Include="Morgue\FreshPageModelResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -74,6 +74,7 @@
       <Name>Paxie.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\..\Paxie\packages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\..\Paxie\packages\Xamarin.Forms.1.5.0.6447\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

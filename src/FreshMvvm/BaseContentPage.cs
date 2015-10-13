@@ -11,7 +11,7 @@ namespace Xamarui.Forms.Mvvm
 {
     public interface IBaseContentPage
     {
-        IFreshNavigationService NavigationService { get; set; }        
+        ISimpleNavigationService NavigationService { get; set; }        
     }
 
     public interface IBaseContentPage<T> : IBaseContentPage
@@ -20,10 +20,10 @@ namespace Xamarui.Forms.Mvvm
         void SetModel(T model);
     }
 
-    public class BaseContentPage<T> : ContentPage, IBaseContentPage<T> where T : IFreshBasePageModel, new()
+    public class BaseContentPage<T> : ContentPage, IBaseContentPage<T> where T : ISimpleBasePageModel, new()
     {
         T _viewModel;
-        IFreshNavigationService _nav;
+        ISimpleNavigationService _nav;
         protected ILogService _log;
 
         protected BaseContentPage()
@@ -49,7 +49,7 @@ namespace Xamarui.Forms.Mvvm
             get { return _viewModel; }
         }
 
-        public IFreshNavigationService NavigationService { get; set; }
+        public ISimpleNavigationService NavigationService { get; set; }
 
         public virtual void SetModel(T model) => _viewModel = model;
 
@@ -63,23 +63,23 @@ namespace Xamarui.Forms.Mvvm
         public static Page ToPage(this IBaseContentPage page) => (Page)page;
         public static ContentPage ToContentPage(this IBaseContentPage page) => (ContentPage)page;
         public static IBaseContentPage ToIBaseContentPage(this Page page) => page as IBaseContentPage;
-        public static IBaseContentPage ToIBaseContentPage<T>(this Page page) where T: IFreshBasePageModel, new() => page as IBaseContentPage<T>;
-        public static BaseContentPage<T> ToBaseContentPage<T>(this Page page) where T: IFreshBasePageModel, new() => page as BaseContentPage<T>;
-        public static BaseContentPage<T> ResolveBaseContentPage<T>(this FreshBasePageModel model) where T : IFreshBasePageModel, new() => InstanceFactory.Current.GetInstance<IBaseContentPage<T>>() as BaseContentPage<T>;
+        public static IBaseContentPage ToIBaseContentPage<T>(this Page page) where T: ISimpleBasePageModel, new() => page as IBaseContentPage<T>;
+        public static BaseContentPage<T> ToBaseContentPage<T>(this Page page) where T: ISimpleBasePageModel, new() => page as BaseContentPage<T>;
+        public static BaseContentPage<T> ResolveBaseContentPage<T>(this SimpleBasePageModel model) where T : ISimpleBasePageModel, new() => InstanceFactory.Current.GetInstance<IBaseContentPage<T>>() as BaseContentPage<T>;
 
-        public static async Task PushPageModel<T>(this FreshBasePageModel model) where T : FreshBasePageModel, new() 
+        public static async Task PushPageModel<T>(this SimpleBasePageModel model) where T : SimpleBasePageModel, new() 
         {
             var page = model.CurrentPage.ToBaseContentPage<T>();
             await page?.NavigationService.PushPage(model.ResolveBaseContentPage<T>());
         }
 
-        public static async Task PopPageModel<T>(this FreshBasePageModel model) where T : IFreshBasePageModel, new()
+        public static async Task PopPageModel<T>(this SimpleBasePageModel model) where T : ISimpleBasePageModel, new()
         {
             var page = model.CurrentPage.ToBaseContentPage<T>();
             await page?.NavigationService.PopPage();
         }
 
-        public static async Task PopToRootPageModel<T>(this FreshBasePageModel model) where T : IFreshBasePageModel, new()
+        public static async Task PopToRootPageModel<T>(this SimpleBasePageModel model) where T : ISimpleBasePageModel, new()
         {
             var page = model.CurrentPage.ToBaseContentPage<T>();
             await page?.NavigationService.PopToRoot();

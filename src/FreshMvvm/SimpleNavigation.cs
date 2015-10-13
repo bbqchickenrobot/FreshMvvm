@@ -5,19 +5,13 @@ using Xamarin.Forms;
 namespace Xamarui.Forms.Mvvm
 {
     // todo - rename to BasicNavigationPage
-    public class FreshNavigationContainer : Xamarin.Forms.NavigationPage, IFreshNavigationService
+    public class SimpleNavigation : Xamarin.Forms.NavigationPage, ISimpleNavigationService
     {
-        public FreshNavigationContainer (Page page) : base (page)
+        public SimpleNavigation (Page page) : base (page)
         {
-            RegisterNavigation ();
             SetNavigation(page);
         }
 
-        protected void RegisterNavigation ()
-        {
-            //FreshIoC.Register<IFreshNavigationService> (this);
-        
-        }
 
         protected virtual Page CreateContainerPage (Page page)
         {
@@ -27,10 +21,11 @@ namespace Xamarui.Forms.Mvvm
 
         protected void SetNavigation(Page page)
         {
-            var nav = (IBaseContentPage)page;
-            if (nav != null)
+            var cp = page.ToIBaseContentPage();
+            
+            if (cp != null)
             {
-                nav.NavigationService = this;
+                cp.NavigationService = this;
             }
         }
 
@@ -42,9 +37,9 @@ namespace Xamarui.Forms.Mvvm
 				await Navigation.PushAsync (page, animate);
         }
 
-        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : FreshBasePageModel, new()
+        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : SimpleBasePageModel, new()
         {
-            await PushPage(page.ToPage());
+            await PushPage(page.ToPage(), modal, animate);
         }
 
 		public async virtual Task PopPage (bool modal = false, bool animate = true)

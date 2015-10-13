@@ -8,14 +8,14 @@ using Paxie.Core.Logging.Services;
 
 namespace Xamarui.Forms.Mvvm
 {
-    public abstract class FreshBasePageModel : IFreshBasePageModel
+    public abstract class SimpleBasePageModel : ISimpleBasePageModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// The previous page model, that's automatically filled, on push
         /// </summary>
-        public IFreshBasePageModel PreviousPageModel { get; set; }  // todo - why does it need to know the current page model?
+        public ISimpleBasePageModel PreviousPageModel { get; set; }  // todo - why does it need to know the current page model?
 
         /// <summary>
         /// A reference to the current page, that's automatically filled, on push
@@ -24,7 +24,7 @@ namespace Xamarui.Forms.Mvvm
 
         protected readonly ILogService _log;
 
-        protected FreshBasePageModel()
+        protected SimpleBasePageModel()
         {
             _log = InstanceFactory.Current.GetInstance<ILogService>();
         }

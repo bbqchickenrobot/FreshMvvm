@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections;
-//using FreshTinyIoC;
 using SimpleInjector;
 using System.Collections.Generic;
+using Paxie.Core;
 
-namespace FreshMvvm
+namespace Xamarui.Forms.Mvvm
 {
-    public class FreshIOC : IDisposable
+    public static class FreshIoC
     {
-        //public static FreshTinyIoCContainer Container { 
-        //    get {
-        //        return FreshTinyIoCContainer.Current;
-        //    }
-        //}
-        protected static readonly Container _container = new Container();
+        static Container _container;
 
-        public static T Resolve<T>() where T :  class
+        public static Container Container { get { return _container; } set { _container = value; } }
+
+        public static T Resolve<T>() where T : class
         {
-           return  _container.GetInstance<T>();
+            return _container.GetInstance<T>();
         }
 
         public static object Resolve(Type t)
         {
-           return  _container.GetInstance(t);
+            return _container.GetInstance(t);
         }
 
-        public static IEnumerable<T> GetAllInstances<T>() where T: class
+        public static IEnumerable<T> GetAllInstances<T>() where T : class
         {
             return _container.GetAllInstances<T>();
         }
@@ -33,7 +30,7 @@ namespace FreshMvvm
         public static IEnumerable<object> GetAllInstances(Type t)
         {
             return _container.GetAllInstances(t);
-        } 
+        }
 
         public static void Register<TService, TImplementation>() where TService : class where TImplementation : class, TService
         {
@@ -45,14 +42,20 @@ namespace FreshMvvm
             _container.Register(type.GetType());
         }
 
-        public object GetContainer()
+        public static Container GetContainer()
         {
             return _container;
         }
 
-        public void Dispose()
+        public static void SetContainer(Container container)
         {
-            _container.Dispose();
+            Ensure.IsNotNull(container);
+            _container = container;
+        }
+
+        public static void Test()
+        {
+
         }
     }
 }

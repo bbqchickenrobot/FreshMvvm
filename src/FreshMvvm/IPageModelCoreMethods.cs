@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace FreshMvvm
+namespace Xamarui.Forms.Mvvm
 {
     public interface IPageModelCoreMethods
     {

@@ -4,7 +4,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace FreshMvvm
+namespace Xamarui.Forms.Mvvm
 {
     public class FreshMasterDetailNavigationContainer : Xamarin.Forms.MasterDetailPage, IFreshNavigationService
     {
@@ -15,10 +15,6 @@ namespace FreshMvvm
         protected Dictionary<string, Page> Pages { get { return _pages; } }
         protected ObservableCollection<string> PageNames { get { return _pageNames; } }
 
-        public FreshMasterDetailNavigationContainer ()
-        {			
-        }
-
         public void Init (string menuTitle, string menuIcon = null)
         {
             CreateMenuPage (menuTitle, menuIcon);
@@ -27,12 +23,14 @@ namespace FreshMvvm
 
         protected virtual void RegisterNavigation ()
         {
-            FreshIOC.Register<IFreshNavigationService> (this);
+            //FreshIoC.Register<IFreshNavigationService> (this);
         }
 
-        public virtual void AddPage<T> (string title, object data = null) where T : FreshBasePageModel
+        public virtual void AddPage<T> (string title, object data = null) where T : IFreshBasePageModel
         {
-            var page = FreshPageModelResolver.ResolvePageModel<T> (data);
+            //var page = FreshPageModelResolver.ResolvePageModel<T> (data);
+            var page = FreshIoC.Resolve<IBaseContentPage<T>>() as Page;
+            ((IBaseContentPage) page).NavigationService = this;
             var navigationContainer = CreateContainerPage (page);
             _pages.Add (title, navigationContainer);
             _pageNames.Add (title);
@@ -47,15 +45,20 @@ namespace FreshMvvm
 
         protected virtual void CreateMenuPage (string menuPageTitle, string menuIcon = null)
         {
-            _menuPage = new ContentPage ();
-            _menuPage.Title = menuPageTitle;
-            var listView = new ListView ();
-
-            listView.ItemsSource = _pageNames;
-
-            listView.ItemSelected += (sender, args) => {
-                if (_pages.ContainsKey ((string)args.SelectedItem)) {
-                    Detail = _pages [(string)args.SelectedItem];
+            _menuPage = new ContentPage
+            {
+                Title = menuPageTitle
+            };
+            var listView = new ListView
+            {
+                ItemsSource = _pageNames
+            };
+            // todo - here's where to add the icons, etc...
+            listView.ItemSelected += (sender, args) =>
+            {
+                if (_pages.ContainsKey((string)args.SelectedItem))
+                {
+                    Detail = _pages[(string)args.SelectedItem];
                 }
 
                 IsPresented = false;
@@ -63,15 +66,20 @@ namespace FreshMvvm
 
             _menuPage.Content = listView;
 
-            var navPage = new NavigationPage (_menuPage) { Title = "Menu" };
+            var navPage = new NavigationPage(_menuPage) { Title = "Menu" };
 
-            if (!string.IsNullOrEmpty (menuIcon))
+            if (!string.IsNullOrEmpty(menuIcon))
                 navPage.Icon = menuIcon;
-            
+
             Master = navPage;
         }
 
-        public async Task PushPage (Page page, FreshBasePageModel model, bool modal = false, bool animate = true)
+        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : FreshBasePageModel, new()
+        {
+            await PushPage(page.ToPage());
+        }
+
+        public async Task PushPage (Page page, bool modal = false, bool animate = true)
              {
 			if (modal)
 				await Navigation.PushModalAsync (new NavigationPage (page));

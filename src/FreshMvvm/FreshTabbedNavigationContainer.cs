@@ -3,8 +3,9 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FreshMvvm
+namespace Xamarui.Forms.Mvvm
 {
+    // todo - rename class (remove Fresh)
     public class FreshTabbedNavigationContainer : TabbedPage, IFreshNavigationService
     {
         public FreshTabbedNavigationContainer ()
@@ -14,12 +15,15 @@ namespace FreshMvvm
 
         protected void RegisterNavigation ()
         {
-            FreshIOC.Register<IFreshNavigationService> (this);
+            //FreshIoC.Register<IFreshNavigationService> (this);
         }
 
-        public virtual Page AddTab<T> (string title, string icon, object data = null) where T : FreshBasePageModel
+        public virtual Page AddTab<T> (string title, string icon, object data = null) where T : IFreshBasePageModel
         {
-            var page = FreshPageModelResolver.ResolvePageModel<T> (data);
+            //var page = FreshPageModelResolver.ResolvePageModel<T> (data);
+            var page = FreshIoC.Resolve<IBaseContentPage<T>>() as Page;
+            var baseContentPage = page as IBaseContentPage;
+            if (baseContentPage != null) baseContentPage.NavigationService = this;
             var navigationContainer = CreateContainerPage (page);
             navigationContainer.Title = title;
             if (!string.IsNullOrWhiteSpace(icon))
@@ -33,7 +37,12 @@ namespace FreshMvvm
             return new NavigationPage (page);
         }
 
-		public async System.Threading.Tasks.Task PushPage (Xamarin.Forms.Page page, FreshBasePageModel model, bool modal = false, bool animate = true)
+        public async virtual Task PushPage<T>(BaseContentPage<T> page, bool modal = false, bool animate = true) where T : FreshBasePageModel, new()
+        {
+            await PushPage(page.ToPage());
+        }
+
+        public async System.Threading.Tasks.Task PushPage (Xamarin.Forms.Page page, bool modal = false, bool animate = true)
         {
             if (modal)
                 await this.CurrentPage.Navigation.PushModalAsync (CreateContainerPage (page));
